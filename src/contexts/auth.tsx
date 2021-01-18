@@ -13,37 +13,38 @@ export const signInWithGoogle = () => {
 
 export const signout = () => firebase.auth().signOut();
 
+
+const initialiseUser = async (authUser, setUser, setLoading) => {
+  if (authUser) {
+    const db = firebase.firestore();
+    const ref = db.collection("users").doc(authUser.uid);
+
+    return ref.onSnapshot(async (user) => {
+      if (!user.exists) {
+        const { email, uid, displayName } = authUser;
+
+        return ref.set({
+          email,
+          uid,
+          displayName,
+        });
+      } else {
+        setUser(user.data());
+        setLoading(false);
+      }
+    });
+  } else {
+    
+    setUser(null);
+    setLoading(false);
+  }
+};
+
 export const AuthProvider = ({ children }) => {
   const [authenticating, setAuthenticating] = useState(true);
   const [loading, setLoading] = useState(true);
   const [authUser, setAuthUser] = useState<any>(null);
   const [user, setUser] = useState<any>(null); 
-
-  const initialiseUser = async () => {
-    if (authUser) {
-      const db = firebase.firestore();
-      const ref = db.collection("users").doc(authUser.uid);
-
-      return ref.onSnapshot(async (user) => {
-        if (!user.exists) {
-          const { email, uid, displayName } = authUser;
-  
-          return ref.set({
-            email,
-            uid,
-            displayName,
-          });
-        } else {
-          setUser(user.data());
-          setLoading(false);
-        }
-      });
-    } else {
-      
-      setUser(null);
-      setLoading(false);
-    }
-  };
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged((au) => {
@@ -54,10 +55,10 @@ export const AuthProvider = ({ children }) => {
 
   useEffect((): any => {
     if (!authenticating) {
-      const promise = initialiseUser();
+      const promise = initialiseUser(authUser, setUser, setLoading);
       return () => promise.then(unsub => unsub && unsub()); 
     }
-  }, [authUser, authenticating, initialiseUser]);
+  }, [authUser, authenticating]);
 
   return (
     <AuthContext.Provider
