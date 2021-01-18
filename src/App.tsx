@@ -6,7 +6,6 @@ import {
 } from "react-router-dom";
 
 import { AuthProvider, useAuth } from "contexts/auth";
-import { DBProvider } from "contexts/db";
 import { Loading, Dashboard, SignIn } from "pages";
 
 const Route = ({ render, ...props }: any) => {
@@ -67,29 +66,27 @@ const PublicRoute = ({ render, ...props }: any) => {
 
 function App() {
   return (
-    <DBProvider>
-      <AuthProvider>
-        <Router>
-          <Switch>
-            <PublicRoute path="/sign-in" render={() => <SignIn />} />
-            <Route path="/dashboard" render={() => <Dashboard />} />
-            <Route
-              exact
-              path="/"
-              render={() => {
-                return (
-                  <Redirect
-                    to={{
-                      pathname: "/dashboard",
-                    }}
-                  />
-                );
-              }}
-            />
-          </Switch>
-        </Router>
-      </AuthProvider>
-    </DBProvider>
+    <AuthProvider>
+      <Router>
+        <Switch>
+          <PublicRoute path="/sign-in" render={() => <SignIn />} />
+          <Route path="/dashboard" render={() => <Dashboard />} />
+          <Route
+            exact
+            path="/"
+            render={() => {
+              return (
+                <Redirect
+                  to={{
+                    pathname: "/dashboard",
+                  }}
+                />
+              );
+            }}
+          />
+        </Switch>
+      </Router>
+    </AuthProvider>
   );
 }
 
