@@ -17,35 +17,7 @@ export const AuthProvider = ({ children }) => {
   const [authenticating, setAuthenticating] = useState(true);
   const [loading, setLoading] = useState(true);
   const [authUser, setAuthUser] = useState<any>(null);
-  const [user, setUser] = useState<any>(null);
-
-
-  //const initialiseUser = async () => {
-  //  if (authUser) {
-  //    const db = firebase.firestore();
-  //    const ref = db.collection("users").doc(authUser.uid);
-  //    let user = await ref.get();
-      
-
-  //    if (!user.exists) {
-  //      const { email, uid, displayName } = authUser;
-
-  //      await ref.set({
-  //        email,
-  //        uid,
-  //        displayName,
-  //      });
-
-  //      user = await ref.get();
-  //    }
-
-  //    setUser(user.data());
-  //  } else {
-  //    setUser(null);
-  //  }
-
-  //  setLoading(false);
-  //};
+  const [user, setUser] = useState<any>(null); 
 
   const initialiseUser = async () => {
     if (authUser) {
@@ -85,7 +57,7 @@ export const AuthProvider = ({ children }) => {
       const promise = initialiseUser();
       return () => promise.then(unsub => unsub && unsub()); 
     }
-  }, [authUser, authenticating]);
+  }, [authUser, authenticating, initialiseUser]);
 
   return (
     <AuthContext.Provider
