@@ -1,25 +1,95 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {
+  BrowserRouter as Router,
+  Route as BaseRoute,
+  Redirect,
+  Switch,
+} from "react-router-dom";
+
+import { AuthProvider, useAuth } from "contexts/auth";
+import { DBProvider } from "contexts/db";
+import { Loading, Dashboard, SignIn } from "pages";
+
+const Route = ({ render, ...props }: any) => {
+  const { user, ready } = useAuth();
+
+  return (
+    <BaseRoute
+      {...props}
+      render={({ location }) => {
+        if (!ready) {
+          return <Loading />;
+        }
+
+        if (user) {
+          return render();
+        }
+
+        return (
+          <Redirect
+            to={{
+              pathname: "/sign-in",
+              state: { from: location },
+            }}
+          />
+        );
+      }}
+    />
+  );
+};
+
+const PublicRoute = ({ render, ...props }: any) => {
+  const { user, ready } = useAuth();
+
+  return (
+    <BaseRoute
+      {...props}
+      render={({ location }) => {
+        if (!ready) {
+          return <Loading />;
+        }
+
+        if (!user) {
+          return render();
+        }
+
+        return (
+          <Redirect
+            to={{
+              pathname: "/",
+              state: { from: location },
+            }}
+          />
+        );
+      }}
+    />
+  );
+};
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <DBProvider>
+      <AuthProvider>
+        <Router>
+          <Switch>
+            <PublicRoute path="/sign-in" render={() => <SignIn />} />
+            <Route path="/dashboard" render={() => <Dashboard />} />
+            <Route
+              exact
+              path="/"
+              render={() => {
+                return (
+                  <Redirect
+                    to={{
+                      pathname: "/dashboard",
+                    }}
+                  />
+                );
+              }}
+            />
+          </Switch>
+        </Router>
+      </AuthProvider>
+    </DBProvider>
   );
 }
 
