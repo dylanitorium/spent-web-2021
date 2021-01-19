@@ -1,6 +1,7 @@
 import { useEffect, createContext, useContext, useState } from "react";
 import firebase from "../firebase";
 import createAuthenticator from "../auth";
+import { v4 as uuid} from 'uuid'
 
 export const AuthContext = createContext({});
 export const useAuth: any = () => useContext(AuthContext);
@@ -25,7 +26,8 @@ const initialiseUser = async (authUser, setUser, setLoading) => {
 
         return ref.set({
           email,
-          uid,
+          user_id: uuid(),
+          auth_id: uid,
           displayName,
         });
       } else {

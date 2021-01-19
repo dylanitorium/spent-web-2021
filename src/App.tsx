@@ -6,7 +6,7 @@ import {
 } from "react-router-dom";
 
 import { AuthProvider, useAuth } from "contexts/auth";
-import { Loading, Dashboard, SignIn } from "pages";
+import { Loading, Dashboard, SignIn, Onboard } from "pages";
 
 const Route = ({ render, ...props }: any) => {
   const { user, ready } = useAuth();
@@ -71,6 +71,7 @@ function App() {
         <Switch>
           <PublicRoute path="/sign-in" render={() => <SignIn />} />
           <Route path="/dashboard" render={() => <Dashboard />} />
+          <Route path="/onboard" render={() => <Onboard />} />
           <Route
             exact
             path="/"
