@@ -42,11 +42,11 @@ const OnboardStepTracker = ({ activeStep }: { activeStep: number }) => {
       </Dot>
       <Line />
       <Dot active={isActive(1)} completed={isCompleted(1)}>
-        Share
+        Import
       </Dot>
       <Line />
       <Dot active={isActive(2)} completed={isCompleted(2)}>
-        Import
+        Share
       </Dot>
     </div>
   );

@@ -1,0 +1,17 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if request.auth != null;
+    }
+
+    function belongsToUser() {
+      return request.auth.uid != null && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.user_id in resource.data.users;
+    }
+
+    match /budgets/{budgetId} {
+      allow read, update, delete: if belongsToUser();
+      allow create: if request.auth.uid != null
+    }
+  }
+}

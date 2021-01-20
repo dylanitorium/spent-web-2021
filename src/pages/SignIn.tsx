@@ -1,9 +1,9 @@
-import { auth } from "contexts";
+import { useAuth } from "contexts/auth";
 import { Container } from "components";
 import { Center, Button } from "ui-components";
 
 const SignIn = () => {
-  const { signInWithGoogle } = auth.useAuth();
+  const { signInWithGoogle } = useAuth();
   return (
     <Container>
       <Center column>

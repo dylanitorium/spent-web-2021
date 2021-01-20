@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "spent-425ba"
+    "default": "spentdev-fb5d2",
+    "production": "spent-425ba"
   }
 }

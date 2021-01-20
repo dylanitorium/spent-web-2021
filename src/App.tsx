@@ -7,6 +7,7 @@ import {
 
 import { AuthProvider, useAuth } from "contexts/auth";
 import { Loading, Dashboard, SignIn, Onboard } from "pages";
+import { ModelProvider } from "contexts/model";
 
 const Route = ({ render, ...props }: any) => {
   const { user, ready } = useAuth();
@@ -67,26 +68,28 @@ const PublicRoute = ({ render, ...props }: any) => {
 function App() {
   return (
     <AuthProvider>
-      <Router>
-        <Switch>
-          <PublicRoute path="/sign-in" render={() => <SignIn />} />
-          <Route path="/dashboard" render={() => <Dashboard />} />
-          <Route path="/onboard" render={() => <Onboard />} />
-          <Route
-            exact
-            path="/"
-            render={() => {
-              return (
-                <Redirect
-                  to={{
-                    pathname: "/dashboard",
-                  }}
-                />
-              );
-            }}
-          />
-        </Switch>
-      </Router>
+      <ModelProvider>
+        <Router>
+          <Switch>
+            <PublicRoute path="/sign-in" render={() => <SignIn />} />
+            <Route path="/dashboard" render={() => <Dashboard />} />
+            <Route path="/onboard" render={() => <Onboard />} />
+            <Route
+              exact
+              path="/"
+              render={() => {
+                return (
+                  <Redirect
+                    to={{
+                      pathname: "/dashboard",
+                    }}
+                  />
+                );
+              }}
+            />
+          </Switch>
+        </Router>
+      </ModelProvider>
     </AuthProvider>
   );
 }

@@ -1,59 +1,33 @@
 import { Container } from "components";
-import { Field, Form } from "components/form";
-import { useAuth } from "contexts/auth";
-import { useCreateDoc, useSubscribeToCollection } from "db";
+import { useModel } from "contexts/model";
 import { Loading } from "pages";
 import { useEffect, useMemo, useState } from "react";
-import { Center, Button } from "ui-components";
+import { Center } from "ui-components";
 import { OnboardStepTracker } from "./components";
+import { Create, Import } from "./steps";
 
-
-
-const Create = () => {
-  const { user } = useAuth();
-  const [createBudget, loading] = useCreateDoc("budgets", "budget_id");
-  const [name, setName] = useState();
-
-  const handleCreateBudget = async () => {
-    await createBudget({ name, user_id: user.user_id });
-  };
-
-  return (
-    <Form onSubmit={handleCreateBudget}>
-      <div className="mb-3">
-        <Field
-          name="name"
-          label="Budget Name"
-          onChange={({ value }) => setName(value)}
-        />
-      </div>
-      <Button loading={loading}>Next</Button>
-    </Form>
-  );
-};
-
-const Share = ({ budget }) => {
-  return <div>Share {budget.name} {budget.budget_id}</div>;
-};
-
-const Import = () => {
+const Share = () => {
   return <div />;
 };
 
 const Onboard = () => {
   const [budget, setBudget] = useState();
-  const [budgets, subscribeToBudgets, loading] = useSubscribeToCollection(
-    "budgets"
-  );
+  const [loading, setLoading] = useState(true);
+
+  const { budgets } = useModel();
 
   useEffect(() => {
-    const unsubscribe = subscribeToBudgets();
-    return () => unsubscribe();
+    const promise = budgets?.subscribe({
+      onSnapshot: async (snapshot) => {
+        if (budgets && !budget) {
+          setBudget(snapshot && snapshot[0]);
+        }
+        setLoading(false);
+      },
+    });
+
+    return () => void promise?.then((unsub) => unsub && unsub());
   }, []);
-
-  useEffect(() => {
-    setBudget(budgets[0]);
-  }, [budgets]);
 
   const step = useMemo(() => {
     if (!budget) return 0;
@@ -68,13 +42,13 @@ const Onboard = () => {
     <Container>
       <Center>
         <div className="flex items-center">
-          <div className="mr-6">
+          <div className="mr-12">
             <OnboardStepTracker activeStep={step} />
           </div>
-          <div>
+          <div className="w-96">
             {step === 0 && <Create />}
-            {step === 1 && <Share budget={budget} />}
-            {/*{step === 2 && <Import />}*/}
+            {step === 1 && <Import budget={budget} />}
+            {/*{step === 2 && <Share />}*/}
           </div>
         </div>
       </Center>
