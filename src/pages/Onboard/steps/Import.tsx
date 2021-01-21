@@ -4,6 +4,8 @@ import { Button } from "ui-components";
 import { useDropzone } from "react-dropzone";
 import { Form } from "ui-components/form";
 
+import firebase from '../../../firebase';
+
 const Import = ({ budget }) => {
   const [loading, setLoading] = useState(false);
   const { getRootProps, getInputProps, acceptedFiles } = useDropzone();
@@ -26,7 +28,12 @@ const Import = ({ budget }) => {
     return "Drag a file here or click to select";
   };
 
-  const handleImportFiles = () => {};
+  const handleImportFiles = async () => {
+    setLoading(true);
+    const storage = firebase.storage().ref();
+    const ref = storage.child(`${budget.budget_id}/imports/${acceptedFiles[0].name}`);
+    await ref.put(acceptedFiles[0]);
+  };
 
   return (
     <div>
