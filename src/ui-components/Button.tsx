@@ -10,8 +10,9 @@ type ButtonProps = {
   history: any;
   children: any;
   invisible?: boolean;
-  compact?: boolean;
-  loading?: boolean
+  inverse?: boolean;
+  loading?: boolean;
+  disabled?: boolean;
 };
 
 const Button = ({
@@ -20,8 +21,9 @@ const Button = ({
   history,
   children,
   invisible = false,
-  compact = false,
+  inverse = false,
   loading = false,
+  disabled = false,
   ...props
 }: ButtonProps) => {
   const handleClick = () => {
@@ -32,19 +34,75 @@ const Button = ({
     onClick();
   };
 
-  const className = invisible
-    ? ""
-    : compact
-    ? "text-white bg-black rounded uppercase text-sm tracking-widest transition-all hover:bg-gray-800 py-1 px-2"
-    : "text-white bg-black rounded uppercase text-sm tracking-widest p-3 w-64 h-12 transition-all hover:bg-gray-800";
+  let classes = [
+    "flex",
+    "items-center",
+    "justify-center",
+    "font-medium",
+    "rounded",
+    "uppercase",
+    "tracking-widest",
+    "p-3",
+
+    "transition-all",
+    "duration-300",
+    "focus:outline-none",
+  ];
+
+  if (disabled) {
+    classes = classes.concat([
+      "text-indigo-300",
+      "bg-indigo-100",
+      "hover:bg-indigo-100",
+      "w-40",
+      "h-12",
+      "cursor-not-allowed",
+    ]);
+  } else {
+    if (!invisible) {
+      classes = classes.concat(["w-40", "h-12"]);
+
+      if (inverse) {
+        classes = classes.concat([
+          "text-indigo-700",
+          "bg-indigo-50",
+          "hover:bg-indigo-100",
+        ]);
+      } else {
+        classes = classes.concat([
+          "text-indigo-50",
+          "bg-indigo-700",
+          "hover:bg-indigo-600",
+        ]);
+      }
+    } else {
+      if (inverse) {
+        classes = classes.concat(["text-indigo-900"]);
+      } else {
+        classes = classes.concat(["text-indigo-50"]);
+      }
+    }
+  }
 
   return (
     <button
-      className={className}
+      className={classes.join(" ")}
       {...stripNonDOMProps(props)}
       onClick={handleClick}
+      disabled={disabled}
     >
-      {loading ? <BeatLoader css={css`position: relative; top: 1px`}color="white" size={10} /> : children}
+      {loading ? (
+        <BeatLoader
+          css={css`
+            position: relative;
+            top: 1px;
+          `}
+          color={inverse ? "#312E81" : "EEF2FF"}
+          size={10}
+        />
+      ) : (
+        children
+      )}
     </button>
   );
 };

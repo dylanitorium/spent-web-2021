@@ -4,9 +4,9 @@ import { Center } from "ui-components";
 
 const Loading = () => {
   return (
-    <Container>
+    <Container dark>
       <Center>
-        <BeatLoader color={"black"} />
+        <BeatLoader color={"#EEF2FF"} />
       </Center>
     </Container>
   );

@@ -1,17 +1,7 @@
 import { v4 as uuid } from "uuid";
 import OwnedModel from "./OwnedModel";
 import firebase from "../firebase";
-
-interface CreateBudget {
-  name: string;
-  users?: string[];
-}
-
-interface Budget {
-  name: string;
-  budget_id: string;
-  users: string[];
-}
+import { CreateBudget, Budget } from "../../types";
 
 export default class Budgets extends OwnedModel {
   collection: any;
@@ -42,7 +32,7 @@ export default class Budgets extends OwnedModel {
     onSnapshot: (budget: Budget | Budget[] | null) => Promise<void>;
   }) {
     const target = (() => {
-      if (ref) {      
+      if (ref) {
         return this.collection.doc(ref);
       }
 

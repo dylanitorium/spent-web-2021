@@ -1,5 +1,11 @@
 import styled from "@emotion/styled";
-import * as icons from "react-icons/md";
+import * as mdIcons from "react-icons/md";
+import * as siIcons from "react-icons/si";
+
+const icons = {
+  ...mdIcons,
+  ...siIcons
+};
 
 interface IconProps {
   name: string;
@@ -10,18 +16,13 @@ interface IconProps {
 
 const Icon = ({
   name,
-  size = "24px",
-  color = "#fff",
   className,
 }: IconProps) => {
-  if (!name || !icons[`Md${name}`]) {
+  if (!name || !icons[name]) {
     return <div />;
   }
 
-  const Element = styled(icons[`Md${name}`])`
-    font-size: ${size};
-    color: ${color};
-  `;
+  const Element = icons[name];
 
   return <Element className={className} />;
 };

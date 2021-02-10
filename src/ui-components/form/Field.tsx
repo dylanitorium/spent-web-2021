@@ -13,7 +13,7 @@ const Field = ({ onChange, name, label, showLabel = false, ...props }: FieldProp
     {label && showLabel && <label htmlFor={name}>{label}</label>}
     <input
       name={name}
-      className="h-12 w-100 px-4 rounded"
+      className="h-12 w-100 px-4 transition-all rounded border-indigo-300 border placeholder-indigo-300 text-indigo-900 bg-indigo-100 focus:border-indigo-700 focus:ring-1 focus:ring-indigo-700  "
       onChange={(e) => onChange({ name, value: e.target.value })}
       {...props}
     />

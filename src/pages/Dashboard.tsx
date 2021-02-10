@@ -1,12 +1,7 @@
 import { Container } from "components";
 import Loading from "pages/Loading";
 import React, { useEffect } from "react";
-import {
-  
-  
-  Redirect,
-  
-} from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import { Center, Button } from "ui-components";
 import isEmpty from "lodash/isEmpty";
 import { useGetCollection } from "db";
@@ -25,9 +20,7 @@ const Dashboard = () => {
   }
 
   if (isEmpty(budgets)) {
-    return (
-      <Redirect to="/onboard" />
-    );
+    return <Redirect to="/onboard" />;
   }
 
   return (

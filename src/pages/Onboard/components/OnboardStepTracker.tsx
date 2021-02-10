@@ -10,26 +10,26 @@ const Dot = ({
   <div className="flex items-center">
     <span
       className={`uppercase text-sm tracking-widest transition-all  w-16 text-right ${
-        active ? "font-semibold" : "text-gray-500"
+        active ? "font-semibold text-indigo-50" : "text-indigo-300"
       }`}
     >
       {children}
     </span>
-    <div className="rounded-full w-6 h-6 bg-gray-900 ml-3 flex justify-center items-center">
+    <div className="rounded-full w-10 h-10 bg-indigo-300 ml-3 flex justify-center items-center">
       <div
-        className={`rounded-full w-4 h-4 bg-white transition-all  ${
+        className={`rounded-full w-8 h-8 bg-indigo-50 transition-all  ${
           active
             ? "opacity-1"
             : completed
-            ? "bg-gray-400 opacity-1"
-            : "opacity-0"
+            ? "opacity-0"
+            : "bg-indigo-900 opacity-1"
         }`}
       ></div>
     </div>
   </div>
 );
 
-const Line = () => <div className="w-1 h-12 mr-2.5 bg-gray-900" />;
+const Line = () => <div style={{ marginRight: "18px" }} className="w-1 h-12 bg-indigo-300" />;
 
 const OnboardStepTracker = ({ activeStep }: { activeStep: number }) => {
   const isActive = (index) => activeStep === index;

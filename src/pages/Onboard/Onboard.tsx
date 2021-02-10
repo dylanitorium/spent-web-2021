@@ -1,8 +1,9 @@
 import { Container } from "components";
+import { useAuth } from "contexts/auth";
 import { useModel } from "contexts/model";
 import { Loading } from "pages";
 import { useEffect, useMemo, useState } from "react";
-import { Center } from "ui-components";
+import { Button } from "ui-components";
 import { OnboardStepTracker } from "./components";
 import { Create, Import } from "./steps";
 
@@ -15,6 +16,7 @@ const Onboard = () => {
   const [loading, setLoading] = useState(true);
 
   const { budgets } = useModel();
+  const { signout } = useAuth();
 
   useEffect(() => {
     const promise = budgets?.subscribe({
@@ -40,18 +42,24 @@ const Onboard = () => {
 
   return (
     <Container>
-      <Center>
-        <div className="flex items-center">
-          <div className="mr-12">
-            <OnboardStepTracker activeStep={step} />
-          </div>
-          <div className="w-96">
-            {step === 0 && <Create />}
-            {step === 1 && <Import budget={budget} />}
-            {/*{step === 2 && <Share />}*/}
-          </div>
+      <div style={{ width: "600px" }} className="bg-indigo-900 p-4">
+        <div className="flex justify-between items-center mb-16">
+          <h1 className="text-indigo-50 text-5xl">Spent.</h1>
+          <Button invisible onClick={signout}>
+            Sign out
+          </Button>
         </div>
-      </Center>
+        <div className="p-4">
+          <OnboardStepTracker activeStep={step} />
+        </div>
+      </div>
+      <div>
+        <div className="pt-36 pl-20 w-9/12">
+          {step === 0 && <Create />}
+          {step === 1 && <Import budget={budget} />}
+          {/*{step === 2 && <Share />}*/}
+        </div>
+      </div>
     </Container>
   );
 };
