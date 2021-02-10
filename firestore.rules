@@ -13,5 +13,10 @@ service cloud.firestore {
       allow read, update, delete: if belongsToUser();
       allow create: if request.auth.uid != null
     }
+
+    match /imports/{budgetId} {
+      allow read, update, delete: if belongsToUser();
+      allow create: if request.auth.uid != null
+    }
   }
 }

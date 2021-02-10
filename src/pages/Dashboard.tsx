@@ -9,7 +9,7 @@ import { useAuth } from "contexts/auth";
 
 const Dashboard = () => {
   const [budgets, getBudgets, loading] = useGetCollection("budgets");
-  const { signout } = useAuth();
+  const { signout, user } = useAuth();
 
   useEffect(() => {
     getBudgets();
@@ -19,7 +19,7 @@ const Dashboard = () => {
     return <Loading />;
   }
 
-  if (isEmpty(budgets)) {
+  if (user.onboarded) {
     return <Redirect to="/onboard" />;
   }
 

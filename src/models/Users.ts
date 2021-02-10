@@ -1,5 +1,5 @@
 import { v4 as uuid } from "uuid";
-import firebase from "../firebase";
+import firebase from "../firebase"; //TODO
 
 interface CreateUser {
   auth_id: string;
@@ -12,7 +12,8 @@ export interface User {
   auth_id: string;
   displayName: string;
   email: string;
-};
+  onboarded: boolean;
+}
 
 export default class Users {
   collection: any;
@@ -38,7 +39,7 @@ export default class Users {
     onSnapshot,
   }: {
     ref?: string;
-    where?: { field: string, operator: string, value: string };
+    where?: { field: string; operator: string; value: string };
     onSnapshot: (user: User | User[] | null) => Promise<void>;
   }) {
     const target = (() => {
@@ -53,10 +54,10 @@ export default class Users {
 
       return this.collection;
     })();
-    
+
     return target.onSnapshot((snapshot) => {
       if (ref) {
-        onSnapshot(snapshot.exists ?  snapshot.data() : null)
+        onSnapshot(snapshot.exists ? snapshot.data() : null);
       } else {
         const users: User[] = [];
         snapshot.forEach((user) => users.push(user.data()));

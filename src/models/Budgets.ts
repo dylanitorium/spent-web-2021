@@ -17,7 +17,7 @@ export default class Budgets extends OwnedModel {
 
     await this.collection.doc(budget_id).set({
       budget_id,
-      users: [this.user],
+      users: [this.user.user_id],
       ...data,
     });
   }
@@ -39,7 +39,7 @@ export default class Budgets extends OwnedModel {
       const collection = this.collection.where(
         "users",
         "array-contains",
-        this.user
+        this.user.user_id
       );
 
       if (where) {

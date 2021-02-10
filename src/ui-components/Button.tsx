@@ -34,6 +34,7 @@ const Button = ({
     onClick();
   };
 
+  // TODO: classes
   let classes = [
     "flex",
     "items-center",
@@ -97,7 +98,7 @@ const Button = ({
             position: relative;
             top: 1px;
           `}
-          color={inverse ? "#312E81" : "EEF2FF"}
+          color={inverse ? "#312E81" : "#EEF2FF"}
           size={10}
         />
       ) : (

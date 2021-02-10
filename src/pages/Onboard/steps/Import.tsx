@@ -1,14 +1,20 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { Button, Icon } from "ui-components";
 
 import { useDropzone } from "react-dropzone";
 import { Form } from "ui-components/form";
 
-import firebase from "../../../firebase";
+import firebase from "../../../firebase"; //TODO
+import { useAuth } from "contexts/auth";
+import { useModel } from "contexts/model";
+
 
 const Import = ({ budget }) => {
   const [loading, setLoading] = useState(false);
+  const [_import, setImport] = useState();
   const { getRootProps, getInputProps, acceptedFiles } = useDropzone();
+  const { user } = useAuth();
+  const { imports } = useModel();
 
   const hasFiles = useMemo(() => acceptedFiles.length > 0, [acceptedFiles]);
 
@@ -37,12 +43,29 @@ const Import = ({ budget }) => {
     setLoading(true);
     const storage = firebase.storage().ref();
     const ref = storage.child(
-      `${budget.budget_id}/imports/${acceptedFiles[0].name}`
+      `${user.user_id}/${budget.budget_id}/imports/${acceptedFiles[0].name}`
     );
     await ref.put(acceptedFiles[0]);
   };
 
-  return (
+  useEffect(() => {
+    const promise = imports?.subscribe({
+      // ref: "4b0bbf7d-0340-4193-9b83-6e39180a9b6c",
+      onSnapshot: async (snapshot) => {
+        if (imports && !_import) {
+          console.log(snapshot);
+          setImport(snapshot && snapshot[0]);
+        }
+        setLoading(false);
+      },
+    });
+
+    return () => void promise?.then((unsub) => unsub && unsub());
+  }, []);
+
+  console.log('_import', _import);
+
+  return !_import ? (
     <div>
       <h2 className="text-indigo-900 text-3xl font-medium mb-6">
         Import some transactions
@@ -74,6 +97,13 @@ const Import = ({ budget }) => {
         </div>
       </Form>
     </div>
+  ) : (
+    <div>
+    <h2 className="text-indigo-900 text-3xl font-medium mb-6">
+     Create a schema
+    </h2>
+    
+  </div>
   );
 };
 

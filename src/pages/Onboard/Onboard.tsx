@@ -31,6 +31,7 @@ const Onboard = () => {
     return () => void promise?.then((unsub) => unsub && unsub());
   }, []);
 
+
   const step = useMemo(() => {
     if (!budget) return 0;
     return 1;
