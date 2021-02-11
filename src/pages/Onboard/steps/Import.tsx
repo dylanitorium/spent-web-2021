@@ -1,5 +1,5 @@
 import { useMemo, useState, useEffect } from "react";
-import { Button, Icon } from "ui-components";
+import { Button, Icon, FlashMessage } from "ui-components";
 
 import { useDropzone } from "react-dropzone";
 import { Form } from "ui-components/form";
@@ -8,15 +8,6 @@ import firebase from "../../../firebase"; //TODO
 import { useAuth } from "contexts/auth";
 import { useModel } from "contexts/model";
 import BeatLoader from "react-spinners/BeatLoader";
-
-const FlashMessage = ({ children }) => {
-  return (
-    <div className="bg-green-100 text-green-500 border-green-500  border-l-4 px-6 py-6 flex items-center">
-      <Icon name="MdCheckCircle" className="text-3xl" />
-      <div className="ml-4">{children}</div>
-    </div>
-  );
-};
 
 const Import = ({ budget }) => {
   const [loading, setLoading] = useState(true);
@@ -108,7 +99,7 @@ const Import = ({ budget }) => {
           </Form>
         </>
       ) : (
-        <FlashMessage>Upload Successful!</FlashMessage>
+        <FlashMessage type="success">Upload Successful!</FlashMessage>
       )}
     </div>
   );
