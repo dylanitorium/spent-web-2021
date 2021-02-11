@@ -19,7 +19,7 @@ const Dashboard = () => {
     return <Loading />;
   }
 
-  if (user.onboarded) {
+  if (!user.onboarded) {
     return <Redirect to="/onboard" />;
   }
 

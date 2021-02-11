@@ -54,7 +54,7 @@ const Onboard = () => {
           <OnboardStepTracker activeStep={step} />
         </div>
       </div>
-      <div>
+      <div className="flex-1">
         <div className="pt-36 pl-20 w-9/12">
           {step === 0 && <Create />}
           {step === 1 && <Import budget={budget} />}
